@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+/* Fondo general con degradados suaves */
+body {
+  background-color: #FAF8FD;
+  color: #2D2A4A;
+  background-image: 
+    radial-gradient(circle at 10% 12%, rgba(181, 125, 218, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 90% 25%, rgba(65, 71, 139, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(232, 226, 212, 0.4) 0%, transparent 55%),
+    radial-gradient(circle at 80% 90%, rgba(181, 125, 218, 0.09) 0%, transparent 45%);
+  background-attachment: fixed;
+}
+
+/* Barra de desplazamiento personalizada */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(232, 226, 212, 0.4);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(170, 160, 187, 0.6);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(65, 71, 139, 0.6);
+}
+
+/* Indicador de foco para accesibilidad por teclado */
+:focus-visible {
+  outline: 2px solid #B57DDA;
+  outline-offset: 2px;
+}
+
+/* Curvas de animación */
+.ease-spring {
+  transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.ease-snappy {
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Animación de flujo en los cables de la cadena */
+.pulse-cable {
+  stroke-dasharray: 6 6;
+  animation: cableFlow 1.2s linear infinite;
+}
+
+@keyframes cableFlow {
+  from {
+    stroke-dashoffset: 24;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
