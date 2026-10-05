@@ -23,9 +23,10 @@ import {
 
 interface AboutPageProps {
   onNavigate?: (tab: ActiveTab) => void;
+  onOpenLab?: (mode: 'explore' | 'challenges') => void;
 }
 
-export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
+export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onOpenLab }) => {
   const learningGoals = [
     {
       icon: <Network className="w-5 h-5 text-[#B57DDA]" />,
@@ -80,7 +81,17 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
   const modules = [
     {
       tab: 'workbench' as ActiveTab,
-      label: '1. Laboratorio Interactivo (Workbench)',
+      label: 'Laboratorio · Desafíos',
+      labMode: 'challenges' as const,
+      icon: <GitFork className="w-4 h-4 text-[#B57DDA]" />,
+      badge: 'Reto por equipos',
+      summary: 'Resuelve tres misiones con cadenas rotas, decisiones y consecuencias visibles. Prueba tu reparación y defiende el orden con evidencia.',
+      actionText: 'Entrar al Laboratorio',
+    },
+    {
+      tab: 'workbench' as ActiveTab,
+      label: 'Laboratorio · Exploración libre',
+      labMode: 'explore' as const,
       icon: <GitFork className="w-4 h-4 text-[#B57DDA]" />,
       badge: 'Simulador en Vivo',
       summary:
@@ -156,7 +167,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
             {onNavigate && (
               <>
                 <button
-                  onClick={() => onNavigate('workbench')}
+                  onClick={() => onOpenLab ? onOpenLab('explore') : onNavigate('workbench')}
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full text-xs font-bold text-white bg-gradient-to-r from-[#41478B] to-[#B57DDA] shadow-md shadow-[#B57DDA]/30 hover:opacity-95 transition-all duration-300 active:scale-95 cursor-pointer"
                 >
                   <GitFork className="w-3.5 h-3.5" />
@@ -353,7 +364,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
 
                 {onNavigate && (
                   <button
-                    onClick={() => onNavigate(m.tab)}
+                    onClick={() => m.labMode && onOpenLab ? onOpenLab(m.labMode) : onNavigate(m.tab)}
                     className="self-start sm:self-center inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-semibold text-[#41478B] bg-[#FAF8FD] border border-[#E8E2D4] hover:bg-[#B57DDA]/15 hover:border-[#B57DDA]/50 transition-all duration-200 active:scale-95 shrink-0 cursor-pointer"
                   >
                     <span>{m.actionText}</span>
@@ -419,11 +430,11 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate }) => {
           </div>
           {onNavigate && (
             <button
-              onClick={() => onNavigate('workbench')}
+              onClick={() => onOpenLab ? onOpenLab('explore') : onNavigate('workbench')}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-xs font-bold text-white bg-gradient-to-r from-[#41478B] to-[#B57DDA] shadow-md shadow-[#B57DDA]/30 hover:opacity-95 transition-all duration-300 active:scale-95 shrink-0 cursor-pointer"
             >
               <GitFork className="w-4 h-4" />
-              <span>Empezar en el Laboratorio</span>
+              <span>Empezar en el Simulador</span>
             </button>
           )}
         </div>

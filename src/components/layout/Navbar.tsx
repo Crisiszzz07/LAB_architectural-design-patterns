@@ -15,11 +15,13 @@ export type ActiveTab = 'workbench' | 'code' | 'quiz' | 'cases' | 'reference' | 
 interface NavbarProps {
   activeTab: ActiveTab;
   onTabChange: (tab: ActiveTab) => void;
+  challengeMode?: boolean;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   activeTab,
   onTabChange,
+  challengeMode = false,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -34,7 +36,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <>
-      <header className="sticky top-4 z-40 px-4 mb-6">
+      <header className={`${challengeMode ? 'relative pt-3' : 'sticky top-4'} z-40 px-4 mb-4`}>
         <nav className="mx-auto max-w-6xl rounded-full bg-[#FFFFF6]/90 backdrop-blur-xl ring-1 ring-[#E8E2D4] shadow-[0_4px_25px_rgba(65,71,139,0.06)] p-1.5 flex items-center justify-between gap-2 transition-all duration-300">
           
           <div className="flex items-center gap-2.5 pl-3 pr-2 py-1">
@@ -52,7 +54,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
 
           {/* Pestañas (versión escritorio) */}
-          <div className="hidden md:flex items-center gap-1 bg-[#FAF8FD] p-1 rounded-full border border-[#E8E2D4]">
+          <div className="hidden lg:flex items-center gap-1 bg-[#FAF8FD] p-1 rounded-full border border-[#E8E2D4]">
             {tabs.map((tab) => {
               const isActive = activeTab === tab.id;
               return (
@@ -83,7 +85,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex items-center gap-2 pr-1">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden w-8 h-8 rounded-full bg-[#FFFFF6] border border-[#E8E2D4] flex items-center justify-center text-[#41478B] hover:bg-[#E8E2D4]/50"
+              className="lg:hidden w-8 h-8 rounded-full bg-[#FFFFF6] border border-[#E8E2D4] flex items-center justify-center text-[#41478B] hover:bg-[#E8E2D4]/50"
               aria-label="Abrir menú de navegación"
             >
               {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
@@ -94,7 +96,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Menú desplegable para celulares */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 md:hidden bg-[#2D2A4A]/50 backdrop-blur-xl flex flex-col p-6 animate-fade-in">
+        <div className="fixed inset-0 z-50 lg:hidden bg-[#2D2A4A]/50 backdrop-blur-xl flex flex-col p-6 animate-fade-in">
           <div className="bg-[#FFFFF6] rounded-3xl p-6 border border-[#E8E2D4] shadow-2xl flex flex-col gap-4">
             <div className="flex items-center justify-between pb-4 border-b border-[#E8E2D4]">
               <div className="flex items-center gap-2.5">
@@ -112,7 +114,7 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
 
             <div className="flex flex-col gap-2.5">
-              {tabs.map((tab, idx) => (
+              {tabs.map((tab) => (
                 <button
                   key={tab.id}
                   onClick={() => {
@@ -129,7 +131,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                     {tab.icon}
                     <span>{tab.label}</span>
                   </div>
-                  <span className={`text-xs font-mono ${activeTab === tab.id ? 'opacity-80' : 'opacity-40'}`}>#{idx + 1}</span>
+                  <span className={`text-xs font-mono ${activeTab === tab.id ? 'opacity-80' : 'opacity-40'}`}>#{tab.shortcut}</span>
                 </button>
               ))}
             </div>

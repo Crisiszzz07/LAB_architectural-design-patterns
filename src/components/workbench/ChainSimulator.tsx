@@ -6,6 +6,7 @@ import {
   SimulationStep 
 } from '../../types';
 import { PRESET_CHAINS } from '../../data/presets';
+import { ChallengeChainView } from './ChallengeChainView';
 import { HandlerNodeView } from './HandlerNodeView';
 import { RequestDispatcher } from './RequestDispatcher';
 import { PlaybackControls } from './PlaybackControls';
@@ -22,13 +23,19 @@ import {
 
 interface ChainSimulatorProps {
   onStepChange?: (step: SimulationStep | null) => void;
+  initialPreset?: PresetChain;
+  lockDomain?: boolean;
+  challengeView?: boolean;
+  initialValue?: number;
+  visible?: boolean;
+  onConfigurationChange?: (handlers: HandlerNode[]) => void;
 }
 
-export const ChainSimulator: React.FC<ChainSimulatorProps> = ({ onStepChange }) => {
+export const ChainSimulator: React.FC<ChainSimulatorProps> = ({ onStepChange, initialPreset = PRESET_CHAINS[0], onConfigurationChange, lockDomain = false, challengeView = false, initialValue, visible = true }) => {
   // Estado del preset activo
-  const [activePreset, setActivePreset] = useState<PresetChain>(PRESET_CHAINS[0]);
-  const [handlers, setHandlers] = useState<HandlerNode[]>(PRESET_CHAINS[0].handlers);
-  const [currentValue, setCurrentValue] = useState<number>(PRESET_CHAINS[0].sampleRequests[1].value);
+  const [activePreset, setActivePreset] = useState<PresetChain>(initialPreset);
+  const [handlers, setHandlers] = useState<HandlerNode[]>(initialPreset.handlers);
+  const [currentValue, setCurrentValue] = useState<number>(initialValue ?? initialPreset.sampleRequests[1].value);
   
   // Estado de simulación
   const [steps, setSteps] = useState<SimulationStep[]>([]);
@@ -42,7 +49,11 @@ export const ChainSimulator: React.FC<ChainSimulatorProps> = ({ onStepChange }) 
   const [editingHandler, setEditingHandler] = useState<HandlerNode | null>(null);
   const [isCreatingNew, setIsCreatingNew] = useState(false);
 
+  useEffect(() => { onConfigurationChange?.(handlers); }, [handlers, onConfigurationChange]);
+
   const timerRef = useRef<number | null>(null);
+
+  useEffect(() => { if (!visible) setIsPlaying(false); }, [visible]);
 
   // Al cambiar de preset, cargar sus datos
   const handlePresetSelect = (preset: PresetChain) => {
@@ -179,14 +190,14 @@ export const ChainSimulator: React.FC<ChainSimulatorProps> = ({ onStepChange }) 
   useEffect(() => {
     if (currentStepIndex >= 0 && currentStepIndex < steps.length) {
       const step = steps[currentStepIndex];
-      if (onStepChange) onStepChange(step);
+      if (visible && onStepChange) onStepChange(step);
       if (step.status === 'unhandled') {
         setIsFinishedUnhandled(true);
       } else {
         setIsFinishedUnhandled(false);
       }
     }
-  }, [currentStepIndex, steps, onStepChange]);
+  }, [currentStepIndex, steps, onStepChange, visible]);
 
   // Manejo de controles manuales
   const handleStepForward = () => {
@@ -254,6 +265,17 @@ export const ChainSimulator: React.FC<ChainSimulatorProps> = ({ onStepChange }) 
   // Información del paso actual
   const currentStep = currentStepIndex >= 0 ? steps[currentStepIndex] : null;
 
+  if (challengeView) return <>
+    <ChallengeChainView handlers={handlers} preset={activePreset} value={currentValue} currentStep={currentStep}
+      steps={steps} stepIndex={currentStepIndex} playing={isPlaying}
+      onValue={value => { resetSimulation(); setCurrentValue(value); }} onDispatch={handleDispatch}
+      onPause={() => setIsPlaying(!isPlaying)} onNext={handleStepForward} onMove={moveHandler} onDelete={deleteHandler}
+      onEdit={handler => { setIsCreatingNew(false); setEditingHandler(handler); setModalOpen(true); }}
+      onAdd={() => { setIsCreatingNew(true); setEditingHandler(null); setModalOpen(true); }} onFallback={handleAddCatchAll} />
+    <EditHandlerModal isOpen={modalOpen} isNew={isCreatingNew} unit={activePreset.unit} handler={editingHandler}
+      onClose={() => setModalOpen(false)} onSave={handleSaveHandler} />
+  </>;
+
   return (
     <div className="space-y-6">
       
@@ -262,7 +284,7 @@ export const ChainSimulator: React.FC<ChainSimulatorProps> = ({ onStepChange }) 
         <div>
           <span className="text-[10px] font-mono tracking-widest uppercase text-lavender font-bold flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5" />
-            Dominio de Arquitectura Activo
+            {lockDomain ? 'Dominio de la misión' : 'Dominio de Arquitectura Activo'}
           </span>
           <h2 className="text-lg font-bold text-french">
             {activePreset.title}
@@ -274,7 +296,7 @@ export const ChainSimulator: React.FC<ChainSimulatorProps> = ({ onStepChange }) 
 
         {/* Botones de Presets */}
         <div className="flex flex-wrap items-center gap-2">
-          {PRESET_CHAINS.map((preset) => {
+          {!lockDomain && PRESET_CHAINS.map((preset) => {
             const isSelected = activePreset.id === preset.id;
             return (
               <button

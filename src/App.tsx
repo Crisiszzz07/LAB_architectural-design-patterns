@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar, ActiveTab } from './components/layout/Navbar';
 import { ChainSimulator } from './components/workbench/ChainSimulator';
+import { OperationGame } from './components/workbench/OperationGame';
 import { SynchronizedCodeViewer } from './components/code/SynchronizedCodeViewer';
 import { QuizModule } from './components/quiz/QuizModule';
 import { RealWorldGallery } from './components/cases/RealWorldGallery';
@@ -10,8 +11,28 @@ import { SimulationStep } from './types';
 import { GitFork } from 'lucide-react';
 
 export const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<ActiveTab>('about');
-  const [currentStep, setCurrentStep] = useState<SimulationStep | null>(null);
+  const [activeTab, setActiveTab] = useState<ActiveTab>(() => window.location.hash === '#laboratorio/desafios' ? 'workbench' : 'about');
+  const [labMode, setLabMode] = useState<'explore' | 'challenges'>(() => window.location.hash === '#laboratorio/desafios' ? 'challenges' : 'explore');
+  const [simulatorStep, setSimulatorStep] = useState<SimulationStep | null>(null);
+  const [gameStep, setGameStep] = useState<SimulationStep | null>(null);
+  const currentStep = labMode === 'explore' ? simulatorStep : gameStep;
+  const navigateLab = (mode: 'explore' | 'challenges') => {
+    setLabMode(mode);
+    setActiveTab('workbench');
+    window.history.replaceState(null, '', mode === 'challenges' ? '#laboratorio/desafios' : '#laboratorio/explorar');
+  };
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      if (window.location.hash.startsWith('#laboratorio/')) {
+        setActiveTab('workbench');
+        setLabMode(window.location.hash === '#laboratorio/desafios' ? 'challenges' : 'explore');
+      }
+    };
+    handleHashChange();
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
 
   // Atajos de teclado para cambiar de pestaña con los números 1 al 6
   useEffect(() => {
@@ -37,19 +58,20 @@ export const App: React.FC = () => {
       <div>
         <Navbar
           activeTab={activeTab}
+          challengeMode={activeTab === 'workbench' && labMode === 'challenges'}
           onTabChange={setActiveTab}
         />
 
         {/* Contenido de la pestaña actual */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
 
-          <div className="flex items-center justify-between flex-wrap gap-2 mb-6">
+          <div hidden={activeTab === 'workbench' && labMode === 'challenges'} className={`${activeTab === 'workbench' && labMode === 'challenges' ? 'hidden' : 'flex'} items-center justify-between flex-wrap gap-2 mb-6`}>
             <div className="flex items-center gap-2">
               <span className="rounded-full px-3 py-1 text-[10px] uppercase tracking-[0.2em] font-mono font-bold bg-[#B57DDA]/15 text-[#41478B] border border-[#B57DDA]/30 shadow-sm">
                 Arquitectura de Software • Laboratorio GoF
               </span>
               <span className="hidden sm:inline text-xs text-[#AAA0BB] font-mono">
-                Atajos: [1] Propósito [2] Lab [3] Código [4] Quiz [5] Casos [6] UML
+                Atajos: [1] Propósito [2] Laboratorio [3] Código [4] Quiz [5] Casos [6] UML
               </span>
             </div>
 
@@ -59,11 +81,26 @@ export const App: React.FC = () => {
             </div>
           </div>
 
-          {activeTab === 'workbench' && (
-            <div className="animate-fade-in">
-              <ChainSimulator onStepChange={setCurrentStep} />
+          <div hidden={activeTab !== 'workbench'} className="space-y-5">
+            <div className="text-french">
+              <h1 className={labMode === 'challenges' ? 'sr-only' : 'text-2xl font-bold'}>Laboratorio</h1>
+              <p className={labMode === 'challenges' ? 'sr-only' : 'text-sm mt-2'}>Explora el patrón a tu ritmo o repara una cadena con una misión de equipo.</p>
+              <div className={`${labMode === 'explore' ? 'mt-4' : ''} flex gap-1 border-b border-bone max-w-xl`} role="group" aria-label="Modo del laboratorio">
+                {([['explore', 'Exploración libre', 'Elige un dominio y experimenta.'], ['challenges', 'Desafíos', 'Resuelve una misión y defiende tu solución.']] as const).map(([mode, title, description]) => (
+                  <button key={mode} aria-pressed={labMode === mode} aria-controls={`lab-${mode}`} onClick={() => navigateLab(mode)} className={`px-3 py-2 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-french ${labMode === mode ? 'border-b-2 border-french text-french font-bold' : 'text-french/70 hover:bg-porcelain/60'}`}>
+                    <span className="block text-xs sm:text-sm font-bold whitespace-nowrap">{title}</span>
+                    {labMode === 'explore' && <span className="hidden sm:block text-xs mt-1 text-french/70">{description}</span>}
+                  </button>
+                ))}
+              </div>
             </div>
-          )}
+            <div id="lab-explore" hidden={labMode !== 'explore'}>
+              <ChainSimulator onStepChange={setSimulatorStep} />
+            </div>
+            <div id="lab-challenges" hidden={labMode !== 'challenges'}>
+              <OperationGame onStepChange={setGameStep} onNavigate={setActiveTab} onExplore={() => navigateLab('explore')} />
+            </div>
+          </div>
 
           {activeTab === 'code' && (
             <div className="animate-fade-in">
@@ -91,7 +128,7 @@ export const App: React.FC = () => {
 
           {activeTab === 'about' && (
             <div className="animate-fade-in">
-              <AboutPage onNavigate={setActiveTab} />
+              <AboutPage onNavigate={setActiveTab} onOpenLab={navigateLab} />
             </div>
           )}
 
