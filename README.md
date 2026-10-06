@@ -6,7 +6,7 @@ Proyecto desarrollado para la clase de Arquitectura de Software en la Universida
 
 ## De qué trata este proyecto
 
-Aprender patrones de diseño leyendo diapositivas o memorizando diagramas estáticos suele ser a veces tedioso y poco práctico para personas que están más acostumbradas a un estilo de aprendizaje más visual e interactivo. Por eso el objetivo de este lab: un laboratorio web donde en vez de solo leer sobre el patrón Chain of Responsibility (Cadena de Responsabilidad), puedes interactuar directamente con él.
+Aprender patrones arquitectónicos leyendo diapositivas o memorizando diagramas estáticos suele ser a veces tedioso y poco práctico para personas que están más acostumbradas a un estilo de aprendizaje más visual e interactivo. Por eso el objetivo de este lab: un laboratorio web donde en vez de solo leer sobre el patrón Chain of Responsibility (Cadena de Responsabilidad), puedes interactuar directamente con él.
 
 La idea es que puedas armar tu propia cadena de manejadores, cambiarles el orden, modificar las condiciones, enviar peticiones y ver en tiempo real cómo viaja la información entre los eslabones o qué pasa cuando nadie la atiende.
 
@@ -68,10 +68,6 @@ Para moverte rápido entre pestañas sin usar el mouse, puedes usar los números
 - Canvas Confetti (para celebrar cuando sacas buen puntaje en el quiz)
 
 ---
-
-## Autoría
-
-Este es un proyecto que fue creado con fines educativos para la materia de Arquitectura de Software de la UdeC, ya que me tocó exponer acerca del patrón de Chain of responsability, por lo que decidí hacer algo diferente para que sea un poco más interactivo. Sería genial que en un futuro este respositorio crezca un poco más e incluya todos los patrones dados en el curso para contar con un material muy interactivo.
 
 ### Operación: Cadena Rota
 
@@ -158,7 +154,6 @@ El equipo con más puntos gana. Los empates muestran ganadores compartidos, incl
 5. Confirma el cierre. Tanto el docente como los equipos deben ver **Equipo ganador: Delta**, con 22 puntos, y la clasificación final. Recarga ambos perfiles: el resultado permanece.
 6. Comprueba que abrir misiones, calificar y entregar quedan bloqueados. El enlace público también permite consultar el resultado, pero ya no entrar como un nuevo equipo.
 
-Si ya tenías una versión anterior ejecutándose, detén el proceso con Ctrl+C y vuelve a ejecutar `pnpm dev:rooms`. Desde esta versión, el backend se reinicia automáticamente al cambiar su código. Los procesos iniciados con `pnpm server` o `pnpm start` requieren reinicio manual. Un error «Ruta desconocida» al guardar puntos, junto con puntuaciones en cero pese a una reparación correcta, puede indicar que la página está usando un backend anterior.
 
 ### Despliegue con Podman
 
@@ -169,3 +164,8 @@ El despliegue incluye un `Containerfile`, un volumen persistente, un servicio sy
 En producción se requiere una clave docente para **crear** salas, configurada mediante `ROOM_CREATION_KEY` o `ROOM_CREATION_KEY_FILE`, y `ROOM_ALLOWED_ORIGIN` con HTTPS. No es una cuenta estudiantil: los equipos continúan usando nombre y clave de sesión automática. En desarrollo local la clave es opcional; con `ROOM_CREATION_KEY` configurada también se exige.
 
 La instalación Podman usa un secreto montado y un volumen separado. Los pasos de actualización y comprobación están en [deploy/README.md](deploy/README.md), y el alcance y los riesgos pendientes de la auditoría en [deploy/SECURITY-AUDIT.md](deploy/SECURITY-AUDIT.md).
+
+## Autoría
+
+Este es un proyecto que fue creado con fines educativos para la materia de Arquitectura de Software de la UdeC, ya que me tocó exponer acerca del patrón de Chain of responsability, por lo que decidí hacer algo diferente para que sea un poco más interactivo. Sería genial que en un futuro este respositorio crezca un poco más e incluya todos los patrones dados en el curso para contar con un material muy interactivo.
+

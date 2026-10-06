@@ -1,3 +1,4 @@
+/* Hallmark · compact mobile brand, clear content separation · P5 H5 E5 S5 R5 V4 */
 import React, { useState } from 'react';
 import { 
   GitFork, 
@@ -36,18 +37,18 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   return (
     <>
-      <header className={`${challengeMode ? 'relative pt-3' : 'sticky top-4'} z-40 px-4 mb-4`}>
+      <header className={`${challengeMode ? 'relative pt-3' : 'sticky top-4 mt-4'} z-40 px-4 mb-8 sm:mb-10`}>
         <nav className="mx-auto max-w-6xl rounded-full bg-[#FFFFF6]/90 backdrop-blur-xl ring-1 ring-[#E8E2D4] shadow-[0_4px_25px_rgba(65,71,139,0.06)] p-1.5 flex items-center justify-between gap-2 transition-all duration-300">
           
-          <div className="flex items-center gap-2.5 pl-3 pr-2 py-1">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#41478B] to-[#B57DDA] flex items-center justify-center text-white shadow-md shadow-[#B57DDA]/30">
+          <div className="flex items-center gap-2.5 pl-2 sm:pl-3 pr-2 py-1 min-w-0">
+            <div className="w-8 h-8 shrink-0 rounded-full bg-gradient-to-tr from-[#41478B] to-[#B57DDA] flex items-center justify-center text-white shadow-md shadow-[#B57DDA]/30">
               <GitFork className="w-4 h-4" />
             </div>
-            <div className="hidden sm:block leading-tight">
-              <span className="block text-xs font-bold tracking-wider text-[#41478B] uppercase">
+            <div className="min-w-0 leading-tight">
+              <span className="block text-xs font-bold tracking-wider text-french uppercase whitespace-nowrap">
                 CoR Studio
               </span>
-              <span className="block text-[10px] font-mono text-[#B57DDA] font-semibold">
+              <span className="block text-[10px] font-mono text-french/80 font-semibold whitespace-nowrap">
                 GoF Architecture Lab
               </span>
             </div>
@@ -85,8 +86,9 @@ export const Navbar: React.FC<NavbarProps> = ({
           <div className="flex items-center gap-2 pr-1">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden w-8 h-8 rounded-full bg-[#FFFFF6] border border-[#E8E2D4] flex items-center justify-center text-[#41478B] hover:bg-[#E8E2D4]/50"
-              aria-label="Abrir menú de navegación"
+              className="lg:hidden w-11 h-11 shrink-0 rounded-full bg-[#FFFFF6] border border-[#E8E2D4] flex items-center justify-center text-[#41478B] hover:bg-[#E8E2D4]/50"
+              aria-label={mobileMenuOpen ? 'Cerrar menú de navegación' : 'Abrir menú de navegación'}
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
             </button>
