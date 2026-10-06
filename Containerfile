@@ -14,7 +14,10 @@ WORKDIR /app
 COPY --from=build /app/dist ./dist
 COPY server/rooms.mjs server/scoring.mjs server/security.mjs ./server/
 COPY src/shared/activityRules.mjs ./src/shared/activityRules.mjs
-RUN mkdir -p /data && chown node:node /data && chmod 700 /data
+RUN mkdir -p /data /app/runtime-secrets \
+  && touch /app/runtime-secrets/cor-lab-creation-key \
+  && chmod 0400 /app/runtime-secrets/cor-lab-creation-key \
+  && chown node:node /data && chmod 700 /data
 USER node
 EXPOSE 3001
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
