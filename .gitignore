@@ -16,3 +16,9 @@ pnpm-debug.log*
 .env
 .env.local
 .env.*.local
+
+# Estado privado de las salas
+.room-data/
+
+# Informes locales de infraestructura y auditoría
+.private-audit/

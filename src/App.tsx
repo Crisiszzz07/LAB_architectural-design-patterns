@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navbar, ActiveTab } from './components/layout/Navbar';
 import { ChainSimulator } from './components/workbench/ChainSimulator';
-import { OperationGame } from './components/workbench/OperationGame';
+import { RoomHub } from './components/rooms/RoomHub';
 import { SynchronizedCodeViewer } from './components/code/SynchronizedCodeViewer';
 import { QuizModule } from './components/quiz/QuizModule';
 import { RealWorldGallery } from './components/cases/RealWorldGallery';
@@ -11,22 +11,24 @@ import { SimulationStep } from './types';
 import { GitFork } from 'lucide-react';
 
 export const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<ActiveTab>(() => window.location.hash === '#laboratorio/desafios' ? 'workbench' : 'about');
-  const [labMode, setLabMode] = useState<'explore' | 'challenges'>(() => window.location.hash === '#laboratorio/desafios' ? 'challenges' : 'explore');
+  const [activeTab, setActiveTab] = useState<ActiveTab>(() => (window.location.hash === '#laboratorio/desafios' || window.location.hash.startsWith('#sala')) ? 'workbench' : 'about');
+  const [labMode, setLabMode] = useState<'explore' | 'challenges'>(() => (window.location.hash === '#laboratorio/desafios' || window.location.hash.startsWith('#sala')) ? 'challenges' : 'explore');
   const [simulatorStep, setSimulatorStep] = useState<SimulationStep | null>(null);
   const [gameStep, setGameStep] = useState<SimulationStep | null>(null);
   const currentStep = labMode === 'explore' ? simulatorStep : gameStep;
   const navigateLab = (mode: 'explore' | 'challenges') => {
     setLabMode(mode);
     setActiveTab('workbench');
-    window.history.replaceState(null, '', mode === 'challenges' ? '#laboratorio/desafios' : '#laboratorio/explorar');
+    window.location.hash = mode === 'challenges' ? 'laboratorio/desafios' : 'laboratorio/explorar';
   };
 
   useEffect(() => {
     const handleHashChange = () => {
-      if (window.location.hash.startsWith('#laboratorio/')) {
+      if (window.location.hash.startsWith('#sala')) {
+        setActiveTab('workbench'); setLabMode('challenges');
+      } else if (window.location.hash.startsWith('#laboratorio/')) {
         setActiveTab('workbench');
-        setLabMode(window.location.hash === '#laboratorio/desafios' ? 'challenges' : 'explore');
+        setLabMode((window.location.hash === '#laboratorio/desafios' || window.location.hash.startsWith('#sala')) ? 'challenges' : 'explore');
       }
     };
     handleHashChange();
@@ -98,7 +100,7 @@ export const App: React.FC = () => {
               <ChainSimulator onStepChange={setSimulatorStep} />
             </div>
             <div id="lab-challenges" hidden={labMode !== 'challenges'}>
-              <OperationGame onStepChange={setGameStep} onNavigate={setActiveTab} onExplore={() => navigateLab('explore')} />
+              <RoomHub onStepChange={setGameStep} onNavigate={setActiveTab} onExplore={() => navigateLab('explore')} />
             </div>
           </div>
 

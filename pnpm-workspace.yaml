@@ -1,0 +1,5 @@
+packages:
+  - '.'
+overrides:
+  source-map-js: '1.2.2'
+  postcss-selector-parser: '7.1.6'

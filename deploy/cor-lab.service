@@ -1,0 +1,16 @@
+[Unit]
+Description=Operacion Cadena Rota - Podman
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=5
+TimeoutStartSec=120
+TimeoutStopSec=30
+ExecStart=/usr/bin/podman run --rm --replace --name cor-lab --publish 127.0.0.1:3001:3001 --volume cor-lab-data:/data:Z --read-only --tmpfs /tmp:rw,noexec,nosuid,size=16m --cap-drop=all --security-opt=no-new-privileges --pids-limit=128 --memory=512m --memory-swap=512m --cpus=1 --secret cor-lab-creation-key,type=mount,uid=1000,gid=1000,mode=0400 --env ROOM_CREATION_KEY_FILE=/run/secrets/cor-lab-creation-key --env ROOM_TRUST_PROXY=1 --env ROOM_ALLOWED_ORIGIN=https://chain-of-respon.duckdns.org localhost/cor-lab:latest
+ExecStop=/usr/bin/podman stop --time 20 cor-lab
+
+[Install]
+WantedBy=multi-user.target

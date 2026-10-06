@@ -1,10 +1,14 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { useActivityRoom } from '../rooms/ActivityRoomContext';
 import { HandlerNode } from '../../types';
 
 /** Versioned local activity state; each field is validated before reuse. */
 export function useActivityState<T>(key: string, initial: T, validate: (value: unknown) => value is T): [T, Dispatch<SetStateAction<T>>, boolean] {
-  const storageKey = `cor-operation-v2:${key}`;
+  const room = useActivityRoom();
+  const storageKey = `${room?.namespace ?? 'cor-operation-v2'}:${key}`;
   const [value, setValue] = useState<T>(() => {
+    const remote = room?.initial[key];
+    if (validate(remote)) return remote;
     try {
       const stored = localStorage.getItem(storageKey);
       if (stored) { const parsed: unknown = JSON.parse(stored); if (validate(parsed)) return parsed; }
@@ -15,7 +19,8 @@ export function useActivityState<T>(key: string, initial: T, validate: (value: u
   useEffect(() => {
     try { localStorage.setItem(storageKey, JSON.stringify(value)); setAvailable(true); }
     catch { setAvailable(false); }
-  }, [storageKey, value]);
+    room?.onChange(key, value);
+  }, [storageKey, value, room?.onChange]);
   return [value, setValue, available];
 }
 export const isString = (v: unknown): v is string => typeof v === 'string';
