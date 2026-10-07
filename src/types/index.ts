@@ -69,6 +69,9 @@ export interface QuizQuestion {
 }
 
 export interface RealWorldCase {
+  classification: 'Middleware documentado' | 'Mecanismo relacionado' | 'Analogía de negocio';
+  source: { title: string; url: string };
+  snippetNote: string;
   id: string;
   title: string;
   tech: string;

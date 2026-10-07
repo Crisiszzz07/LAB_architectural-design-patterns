@@ -1,4 +1,5 @@
 import React from 'react';
+import { REAL_WORLD_CASES } from '../../data/realWorldCases';
 import { QUICK_REFERENCE_DATA } from '../../data/quickReference';
 import { InteractiveUml } from './InteractiveUml';
 import { DoubleBezelCard } from '../layout/DoubleBezelCard';
@@ -24,16 +25,16 @@ export const QuickReference: React.FC = () => {
             Compendio Teórico Rápido
           </span>
           <h2 className="text-lg font-bold text-french">
-            Referencia Canónica GoF & Diagrama UML
+            Referencia del patrón & Diagrama UML
           </h2>
           <p className="text-xs text-french/70 mt-0.5">
-            Definición formal, estructura de clases e indicadores de decisión para exámenes y proyectos de arquitectura.
+            Paráfrasis de la definición, estructura de clases e indicadores de decisión para exámenes y proyectos de arquitectura.
           </p>
         </div>
 
         <div className="flex items-center gap-2">
           <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-lavender/20 border border-lavender/40 text-french">
-            Design Patterns (GoF) • Cap. 5
+            Design Patterns (GoF)
           </span>
         </div>
       </div>
@@ -45,7 +46,7 @@ export const QuickReference: React.FC = () => {
           <div className="flex items-center gap-2 mb-2">
             <BookOpen className="w-4 h-4 text-lavender" />
             <h3 className="font-bold text-xs uppercase tracking-wider text-french font-mono">
-              Definición Formal (E. Gamma, R. Helm, R. Johnson, J. Vlissides)
+              Paráfrasis en español (Gamma, Helm, Johnson, Vlissides)
             </h3>
           </div>
           <p className="text-xs sm:text-sm text-french italic leading-relaxed bg-bone/25 p-4 rounded-2xl border border-bone">
@@ -63,6 +64,7 @@ export const QuickReference: React.FC = () => {
           <p className="text-xs sm:text-sm text-french leading-relaxed bg-bone/25 p-4 rounded-2xl border border-bone font-medium">
             {QUICK_REFERENCE_DATA.intent}
           </p>
+          <p className="mt-3 text-xs text-french/80">En CoR clásico, un manejador atiende o delega. En la variante middleware, varios pueden participar, continuar o rechazar; algunos actúan al regresar la respuesta. La cadena no exige jerarquía organizativa ni sucesores mutables. Un terminal puede rechazar, registrar o escalar.</p>
         </DoubleBezelCard>
 
       </div>
@@ -200,8 +202,8 @@ export const QuickReference: React.FC = () => {
             <tbody className="divide-y divide-bone bg-porcelain text-french/85">
               <tr className="align-top">
                 <td className="px-4 py-4 font-semibold text-french">Gamma, Helm, Johnson, Vlissides (Gang of Four)</td>
-                <td className="px-4 py-4 leading-relaxed"><cite className="font-medium">Design Patterns: Elements of Reusable Object-Oriented Software</cite>. Addison-Wesley.</td>
-                <td className="px-4 py-4 leading-relaxed">Object Behavioral Patterns: Chain of Responsibility (págs. 223–232).</td>
+                <td className="px-4 py-4 leading-relaxed"><cite className="font-medium">Design Patterns: Elements of Reusable Object-Oriented Software</cite>. Addison-Wesley (1994).</td>
+                <td className="px-4 py-4 leading-relaxed">Object Behavioral Patterns: Chain of Responsibility.</td>
               </tr>
               <tr className="align-top bg-surface/40">
                 <td className="px-4 py-4 font-semibold text-french">Robert C. Martin ("Uncle Bob")</td>
@@ -211,11 +213,15 @@ export const QuickReference: React.FC = () => {
               <tr className="align-top">
                 <td className="px-4 py-4 font-semibold text-french">Mark Richards &amp; Neal Ford</td>
                 <td className="px-4 py-4 leading-relaxed"><cite className="font-medium">Fundamentals of Software Architecture: An Engineering Approach</cite>. O'Reilly Media (2020).</td>
-                <td className="px-4 py-4 leading-relaxed">Capítulo 6: Análisis de cohesión y acoplamiento en arquitecturas modulares.</td>
+                <td className="px-4 py-4 leading-relaxed">Capítulo 3, “Modularity”: cohesión y acoplamiento.</td>
               </tr>
             </tbody>
           </table>
         </div>
+
+        <p className="mt-3 text-xs text-french/80 leading-relaxed">
+          Fuentes oficiales de los casos y mecanismos: {REAL_WORLD_CASES.map((item, index) => <React.Fragment key={item.id}>{index > 0 && ' · '}<a href={item.source.url} target="_blank" rel="noreferrer" className="underline break-words">{item.source.title}</a></React.Fragment>)}. Los fragmentos del laboratorio son código didáctico propio; las correspondencias con CoR son análisis pedagógicos.
+        </p>
 
         <p className="mt-3 text-[11px] text-french/60 italic">
           En pantallas pequeñas, desplaza la tabla horizontalmente para consultar todas las columnas.

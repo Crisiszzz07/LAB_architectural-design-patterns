@@ -31,7 +31,7 @@ export const UnhandledAlert: React.FC<UnhandledAlertProps> = ({
           </div>
 
           <p className="text-xs text-[#41478B]/80 mt-1.5 leading-relaxed font-medium">
-            La petición recorrió todos los eslabones configurados en la cadena sin que ninguno cumpliera la condición de autorización. Al llegar al último manejador con su referencia <code className="bg-[#FFFFF6] px-1.5 py-0.5 rounded font-mono text-[#41478B] border border-[#E8E2D4] font-bold" style={{ backgroundColor: '#FFFFF6' }}>successor == null</code>, la solicitud cayó al vacío sin resolución.
+            La petición recorrió todos los eslabones configurados en la cadena sin que ninguno cumpliera la condición de manejo. Al llegar al último manejador con su referencia <code className="bg-[#FFFFF6] px-1.5 py-0.5 rounded font-mono text-[#41478B] border border-[#E8E2D4] font-bold" style={{ backgroundColor: '#FFFFF6' }}>successor == null</code>, la solicitud quedó sin atender; esta interfaz lo informa explícitamente.
           </p>
 
           <div 
@@ -40,7 +40,7 @@ export const UnhandledAlert: React.FC<UnhandledAlertProps> = ({
           >
             <span className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-[#41478B] shrink-0" />
-              <span><strong>Solución Arquitectónica Defensiva:</strong> Añade un manejador terminal por defecto (Catch-All) o lanza una excepción controlada.</span>
+              <span><strong>Solución Arquitectónica Defensiva:</strong> Considera un terminal que rechace, registre o escale, o informa un error controlado. Un terminal no tiene que aprobar todo.</span>
             </span>
             <button
               onClick={onAddCatchAllHandler}

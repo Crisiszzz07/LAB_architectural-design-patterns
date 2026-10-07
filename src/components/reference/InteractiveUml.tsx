@@ -14,12 +14,12 @@ export const InteractiveUml: React.FC = () => {
       {/* Diagrama SVG Interactivo (7 cols) */}
       <div className="lg:col-span-7">
         <DoubleBezelCard innerClassName="p-6">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex flex-wrap gap-2 items-center justify-between mb-4">
             <span className="text-[10px] font-mono uppercase tracking-wider text-french font-bold">
               Diagrama de Estructura de Clases (GoF)
             </span>
             <span className="text-xs text-french/60 font-mono">
-              Haz clic en cualquier clase para inspeccionarla
+              Selecciona una clase para inspeccionarla
             </span>
           </div>
 
@@ -40,7 +40,7 @@ export const InteractiveUml: React.FC = () => {
                   markerHeight="6"
                   orient="auto"
                 >
-                  <path d="M 0 1 L 8 5 L 0 9 z" fill="#B57DDA" />
+                  <path d="M 0 1 L 8 5 L 0 9" fill="none" stroke="#B57DDA" />
                 </marker>
 
                 {/* Marcador de Herencia (Triángulo) */}
@@ -72,16 +72,19 @@ export const InteractiveUml: React.FC = () => {
                 invoca
               </text>
 
-              {/* Conexión: Handler auto-referencia (successor: Handler) */}
+              {/* Autoasociación navegable: una referencia opcional al siguiente Handler. */}
               <path
-                d="M 450 60 C 530 30, 530 110, 475 95"
+                d="M 480 50 H 570 Q 580 50 580 60 V 100 Q 580 110 570 110 H 480"
                 fill="none"
                 stroke="#B57DDA"
                 strokeWidth="2"
                 markerEnd="url(#arrow-assoc)"
               />
-              <text x="535" y="75" fill="#41478B" className="font-bold text-[11px]" fontFamily="monospace">
-                successor
+              <text x="490" y="101" fill="#41478B" className="text-[10px]" fontFamily="monospace">
+                0..1
+              </text>
+              <text x="495" y="132" fill="#41478B" className="font-bold text-[11px]" fontFamily="monospace">
+                # successor
               </text>
 
               {/* Conexión: ConcreteHandlerA -> Handler (Herencia) */}
@@ -103,6 +106,8 @@ export const InteractiveUml: React.FC = () => {
 
               {/* NODO: Client */}
               <g
+                role="button" tabIndex={0} aria-label="Inspeccionar client"
+                onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setSelectedNodeId('client'); } }}
                 onClick={() => setSelectedNodeId('client')}
                 className="cursor-pointer transition-all hover:opacity-90"
               >
@@ -120,13 +125,15 @@ export const InteractiveUml: React.FC = () => {
                   Client
                 </text>
                 <line x1="20" y1="75" x2="180" y2="75" stroke="#E8E2D4" strokeWidth="1" />
-                <text x="30" y="95" fill="#41478B" opacity="0.8" className="text-[10px]" fontFamily="monospace">
-                  + sendRequest()
+                <text x="30" y="95" fill="#41478B" opacity="0.8" className="text-[9px]" fontFamily="monospace">
+                  + sendRequest(req): void
                 </text>
               </g>
 
               {/* NODO: Handler (Abstract) */}
               <g
+                role="button" tabIndex={0} aria-label="Inspeccionar handler"
+                onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setSelectedNodeId('handler'); } }}
                 onClick={() => setSelectedNodeId('handler')}
                 className="cursor-pointer transition-all hover:opacity-90"
               >
@@ -141,26 +148,28 @@ export const InteractiveUml: React.FC = () => {
                   stroke={selectedNodeId === 'handler' ? '#B57DDA' : '#E8E2D4'}
                 />
                 <text x="395" y="45" fill="#B57DDA" className="text-[10px] font-bold" textAnchor="middle" fontFamily="monospace">
-                  &lt;&lt;abstract&gt;&gt;
+                  {'{abstract}'}
                 </text>
                 <text x="395" y="62" fill="#41478B" className="font-bold text-[14px]" textAnchor="middle" fontFamily="monospace">
                   Handler
                 </text>
                 <line x1="310" y1="70" x2="480" y2="70" stroke="#E8E2D4" strokeWidth="1" />
-                <text x="320" y="86" fill="#41478B" className="text-[10px]" fontFamily="monospace">
-                  # successor: Handler
+                <text x="320" y="86" fill="#41478B" className="text-[9px]" fontFamily="monospace">
+                  {UML_NODES[1].attributes[0]}
                 </text>
                 <line x1="310" y1="94" x2="480" y2="94" stroke="#E8E2D4" strokeWidth="1" />
-                <text x="320" y="110" fill="#41478B" opacity="0.85" className="text-[10px]" fontFamily="monospace">
-                  + handleRequest()
+                <text x="320" y="110" fill="#41478B" opacity="0.85" className="text-[9px]" fontFamily="monospace">
+                  + handleRequest(req): void
                 </text>
-                <text x="320" y="125" fill="#41478B" opacity="0.85" className="text-[10px]" fontFamily="monospace">
-                  + setSuccessor()
+                <text x="320" y="125" fill="#41478B" opacity="0.85" className="text-[9px]" fontFamily="monospace">
+                  + setSuccessor(s): void
                 </text>
               </g>
 
               {/* NODO: ConcreteHandlerA */}
               <g
+                role="button" tabIndex={0} aria-label="Inspeccionar concrete_a"
+                onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setSelectedNodeId('concrete_a'); } }}
                 onClick={() => setSelectedNodeId('concrete_a')}
                 className="cursor-pointer transition-all hover:opacity-90"
               >
@@ -182,16 +191,18 @@ export const InteractiveUml: React.FC = () => {
                   - threshold: int
                 </text>
                 <line x1="180" y1="290" x2="360" y2="290" stroke="#E8E2D4" strokeWidth="1" />
-                <text x="190" y="306" fill="#41478B" opacity="0.85" className="text-[10px]" fontFamily="monospace">
-                  + handleRequest()
+                <text x="190" y="306" fill="#41478B" opacity="0.85" className="text-[9px]" fontFamily="monospace">
+                  + handleRequest(req): void
                 </text>
-                <text x="190" y="321" fill="#41478B" opacity="0.85" className="text-[10px]" fontFamily="monospace">
-                  - canHandle()
+                <text x="190" y="321" fill="#41478B" opacity="0.85" className="text-[9px]" fontFamily="monospace">
+                  - canHandle(req): boolean
                 </text>
               </g>
 
               {/* NODO: ConcreteHandlerB */}
               <g
+                role="button" tabIndex={0} aria-label="Inspeccionar concrete_b"
+                onKeyDown={event => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); setSelectedNodeId('concrete_b'); } }}
                 onClick={() => setSelectedNodeId('concrete_b')}
                 className="cursor-pointer transition-all hover:opacity-90"
               >
@@ -213,18 +224,18 @@ export const InteractiveUml: React.FC = () => {
                   - threshold: int
                 </text>
                 <line x1="420" y1="290" x2="600" y2="290" stroke="#E8E2D4" strokeWidth="1" />
-                <text x="430" y="306" fill="#41478B" opacity="0.85" className="text-[10px]" fontFamily="monospace">
-                  + handleRequest()
+                <text x="430" y="306" fill="#41478B" opacity="0.85" className="text-[9px]" fontFamily="monospace">
+                  + handleRequest(req): void
                 </text>
-                <text x="430" y="321" fill="#41478B" opacity="0.85" className="text-[10px]" fontFamily="monospace">
-                  - canHandle()
+                <text x="430" y="321" fill="#41478B" opacity="0.85" className="text-[9px]" fontFamily="monospace">
+                  - canHandle(req): boolean
                 </text>
               </g>
             </svg>
           </div>
 
           <p className="text-[11px] text-french/70 mt-3 italic text-center">
-            Diagrama canónico GoF: El enlace reflexivo <code className="text-french font-mono font-bold bg-bone/30 px-1 rounded">successor</code> en Handler permite el encadenamiento arbitrario de cualquier número de instancias concretas.
+            Diagrama conceptual adaptado de Chain of Responsibility. La referencia opcional <code className="text-french font-mono font-bold bg-bone/30 px-1 rounded">successor</code> se representa mediante una autoasociación navegable con multiplicidad 0..1. La autoasociación y el atributo del bloque Handler representan la misma propiedad; el inspector muestra su detalle. setSuccessor es de la variante mutable; umbrales y canHandle pertenecen al ejemplo. Las firmas abreviadas del dibujo se detallan con sus tipos en el inspector.
           </p>
         </DoubleBezelCard>
       </div>
@@ -288,7 +299,7 @@ export const InteractiveUml: React.FC = () => {
           {/* Principios SOLID favorecidos */}
           <div className="p-3 rounded-xl bg-lavender/15 border border-lavender/35">
             <span className="text-[10px] uppercase font-mono font-bold text-french block mb-1.5 flex items-center gap-1">
-              <Sparkles className="w-3.5 h-3.5 text-lavender" /> Principios SOLID Aplicados:
+              <Sparkles className="w-3.5 h-3.5 text-lavender" /> Principios que puede favorecer:
             </span>
             <div className="flex flex-wrap gap-1.5">
               {selectedNode.solidPrinciples.map((p, idx) => (

@@ -1,6 +1,6 @@
 //En este archivo se pueden añadir nuevos lenguajes del patrón CHAIN_OF_RESPONSABILITY (ej un c++ estaría muy bien también)
 
-import { SupportedLanguage } from '../types';
+import { SupportedLanguage, SimulationStep } from '../types';
 
 export interface CodeTemplate {
   language: SupportedLanguage;
@@ -18,11 +18,11 @@ export interface CodeTemplate {
 export const CODE_TEMPLATES: Record<SupportedLanguage, CodeTemplate> = {
   java: {
     language: 'java',
-    languageLabel: 'Java (GoF Clásico)',
+    languageLabel: 'Java (fragmento didáctico)',
     fileExtension: 'java',
     lines: [
-      { lineNumber: 1, text: '// 1. Interfaz / Clase Base Abstracta Handler', section: 'handler_base' },
-      { lineNumber: 2, text: 'public abstract class Approver {', section: 'handler_base' },
+      { lineNumber: 1, text: '// Código didáctico: omitidos PurchaseRequest (amount), TeamLeadApprover, ManagerApprover y CfoApprover.', section: 'handler_base' },
+      { lineNumber: 2, text: 'abstract class Approver {', section: 'handler_base' },
       { lineNumber: 3, text: '    protected Approver nextApprover; // Enlace al sucesor', section: 'handler_base' },
       { lineNumber: 4, text: '', section: 'handler_base' },
       { lineNumber: 5, text: '    public Approver setNext(Approver next) {', section: 'handler_base' },
@@ -38,7 +38,7 @@ export const CODE_TEMPLATES: Record<SupportedLanguage, CodeTemplate> = {
       { lineNumber: 15, text: '            nextApprover.processRequest(request); // Delegar al sucesor', section: 'concrete_handler', key: 'call_successor' },
       { lineNumber: 16, text: '        } else {', section: 'concrete_handler' },
       { lineNumber: 17, text: '            // RIESGO GoF: "Receipt is not guaranteed"', section: 'concrete_handler' },
-      { lineNumber: 18, text: '            onUnhandled(request); // Cae sin ser atendida', section: 'concrete_handler', key: 'no_successor_sink' },
+      { lineNumber: 18, text: '            System.err.println("Solicitud sin receptor: " + request);', section: 'concrete_handler', key: 'no_successor_sink' },
       { lineNumber: 19, text: '        }', section: 'concrete_handler' },
       { lineNumber: 20, text: '    }', section: 'concrete_handler' },
       { lineNumber: 21, text: '', section: 'concrete_handler' },
@@ -47,7 +47,7 @@ export const CODE_TEMPLATES: Record<SupportedLanguage, CodeTemplate> = {
       { lineNumber: 24, text: '}', section: 'concrete_handler' },
       { lineNumber: 25, text: '', section: 'client' },
       { lineNumber: 26, text: '// 2. Código Cliente: Configuración y Despacho', section: 'client' },
-      { lineNumber: 27, text: 'public class Client {', section: 'client' },
+      { lineNumber: 27, text: 'class Client {', section: 'client' },
       { lineNumber: 28, text: '    public static void main(String[] args) {', section: 'client' },
       { lineNumber: 29, text: '        Approver lead = new TeamLeadApprover(500);', section: 'client' },
       { lineNumber: 30, text: '        Approver manager = new ManagerApprover(2500);', section: 'client' },
@@ -56,8 +56,8 @@ export const CODE_TEMPLATES: Record<SupportedLanguage, CodeTemplate> = {
       { lineNumber: 33, text: '        // Ensamblado dinámico de la cadena', section: 'client' },
       { lineNumber: 34, text: '        lead.setNext(manager).setNext(cfo);', section: 'client' },
       { lineNumber: 35, text: '', section: 'client' },
-      { lineNumber: 36, text: '        PurchaseRequest req = new PurchaseRequest(amount);', section: 'client' },
-      { lineNumber: 37, text: '        lead.processRequest(req); // El cliente solo conoce al primer eslabón', section: 'client', key: 'client_send' },
+      { lineNumber: 36, text: '        PurchaseRequest req = new PurchaseRequest(2200);', section: 'client' },
+      { lineNumber: 37, text: '        lead.processRequest(req); // Emisión a la cabeza; el cliente configura la cadena', section: 'client', key: 'client_send' },
       { lineNumber: 38, text: '    }', section: 'client' },
       { lineNumber: 39, text: '}', section: 'client' },
     ],
@@ -67,7 +67,7 @@ export const CODE_TEMPLATES: Record<SupportedLanguage, CodeTemplate> = {
     languageLabel: 'TypeScript (Moderno)',
     fileExtension: 'ts',
     lines: [
-      { lineNumber: 1, text: '// 1. Interfaz y Clase Base Handler', section: 'handler_base' },
+      { lineNumber: 1, text: '// Código didáctico: T es el tipo de solicitud; los concretos usan { amount: number }.', section: 'handler_base' },
       { lineNumber: 2, text: 'export abstract class BaseHandler<T> {', section: 'handler_base' },
       { lineNumber: 3, text: '  private nextHandler: BaseHandler<T> | null = null;', section: 'handler_base' },
       { lineNumber: 4, text: '', section: 'handler_base' },
@@ -91,7 +91,7 @@ export const CODE_TEMPLATES: Record<SupportedLanguage, CodeTemplate> = {
       { lineNumber: 22, text: '  protected abstract process(request: T): void;', section: 'concrete_handler' },
       { lineNumber: 23, text: '}', section: 'concrete_handler' },
       { lineNumber: 24, text: '', section: 'client' },
-      { lineNumber: 25, text: '// 2. Ejecución Cliente', section: 'client' },
+      { lineNumber: 25, text: '// Omitidos: TeamLeadHandler, ManagerHandler y CfoHandler (canHandle y process).', section: 'client' },
       { lineNumber: 26, text: 'const lead = new TeamLeadHandler(500);', section: 'client' },
       { lineNumber: 27, text: 'const manager = new ManagerHandler(2500);', section: 'client' },
       { lineNumber: 28, text: 'const cfo = new CfoHandler(10000);', section: 'client' },
@@ -99,19 +99,19 @@ export const CODE_TEMPLATES: Record<SupportedLanguage, CodeTemplate> = {
       { lineNumber: 30, text: '// Construcción de la cadena', section: 'client' },
       { lineNumber: 31, text: 'lead.setNext(manager).setNext(cfo);', section: 'client' },
       { lineNumber: 32, text: '', section: 'client' },
-      { lineNumber: 33, text: 'lead.handle({ amount: requestValue }); // Disparo inicial', section: 'client', key: 'client_send' },
+      { lineNumber: 33, text: 'lead.handle({ amount: 2200 }); // Disparo inicial', section: 'client', key: 'client_send' },
     ],
   },
   python: {
     language: 'python',
-    languageLabel: 'Python (OOP Canónico)',
+    languageLabel: 'Python 3.10+ (fragmento didáctico)',
     fileExtension: 'py',
     lines: [
       { lineNumber: 1, text: 'from abc import ABC, abstractmethod', section: 'handler_base' },
       { lineNumber: 2, text: '', section: 'handler_base' },
       { lineNumber: 3, text: 'class Handler(ABC):', section: 'handler_base' },
       { lineNumber: 4, text: '    def __init__(self):', section: 'handler_base' },
-      { lineNumber: 5, text: '        self._successor: Handler | None = None', section: 'handler_base' },
+      { lineNumber: 5, text: '        self._successor: "Handler | None" = None', section: 'handler_base' },
       { lineNumber: 6, text: '', section: 'handler_base' },
       { lineNumber: 7, text: '    def set_next(self, successor: "Handler") -> "Handler":', section: 'handler_base' },
       { lineNumber: 8, text: '        self._successor = successor', section: 'handler_base' },
@@ -128,13 +128,15 @@ export const CODE_TEMPLATES: Record<SupportedLanguage, CodeTemplate> = {
       { lineNumber: 19, text: '', section: 'concrete_handler' },
       { lineNumber: 20, text: '    @abstractmethod', section: 'concrete_handler' },
       { lineNumber: 21, text: '    def can_handle(self, request: dict) -> bool: pass', section: 'concrete_handler' },
-      { lineNumber: 22, text: '', section: 'client' },
-      { lineNumber: 23, text: '# Código Cliente', section: 'client' },
-      { lineNumber: 24, text: 'lead = TeamLeadHandler(threshold=500)', section: 'client' },
-      { lineNumber: 25, text: 'manager = ManagerHandler(threshold=2500)', section: 'client' },
-      { lineNumber: 26, text: 'lead.set_next(manager)', section: 'client' },
-      { lineNumber: 27, text: '', section: 'client' },
-      { lineNumber: 28, text: 'lead.handle({"amount": amount})  # Receptor implícito', section: 'client', key: 'client_send' },
+      { lineNumber: 22, text: '    @abstractmethod', section: 'concrete_handler' },
+      { lineNumber: 23, text: '    def process(self, request: dict) -> None: pass', section: 'concrete_handler' },
+      { lineNumber: 24, text: '', section: 'client' },
+      { lineNumber: 25, text: '# Python 3.10+. Omitidos: TeamLeadHandler y ManagerHandler con can_handle y process.', section: 'client' },
+      { lineNumber: 26, text: 'lead = TeamLeadHandler(threshold=500)', section: 'client' },
+      { lineNumber: 27, text: 'manager = ManagerHandler(threshold=2500)', section: 'client' },
+      { lineNumber: 28, text: 'lead.set_next(manager)', section: 'client' },
+      { lineNumber: 29, text: '', section: 'client' },
+      { lineNumber: 30, text: 'lead.handle({"amount": 2200})  # Receptor implícito', section: 'client', key: 'client_send' },
     ],
   },
   go: {
@@ -183,8 +185,27 @@ export const CODE_TEMPLATES: Record<SupportedLanguage, CodeTemplate> = {
       { lineNumber: 39, text: '    lead.SetNext(manager).SetNext(cfo)', section: 'client' },
       { lineNumber: 40, text: '', section: 'client' },
       { lineNumber: 41, text: '    request := PurchaseRequest{Amount: 2200}', section: 'client' },
-      { lineNumber: 42, text: '    lead.Handle(request) // El cliente solo conoce el primer eslabon', section: 'client', key: 'client_send' },
+      { lineNumber: 42, text: '    lead.Handle(request) // Emisión a la cabeza de la cadena configurada', section: 'client', key: 'client_send' },
       { lineNumber: 43, text: '}', section: 'client' },
     ],
   },
 };
+
+// Única fuente de correspondencia entre eventos y líneas de referencia.
+export function referenceLine(language: SupportedLanguage, key: SimulationStep['codeLineKey']): number {
+  const line = CODE_TEMPLATES[language].lines.find(line => line.key === key);
+  if (!line) throw new Error(`Clave de referencia ausente: ${language}/${key}`);
+  return line.lineNumber;
+}
+
+export function referenceLines(key: SimulationStep['codeLineKey']): SimulationStep['codeLineNumber'] {
+  return {
+    java: referenceLine('java', key),
+    typescript: referenceLine('typescript', key),
+    python: referenceLine('python', key),
+    go: referenceLine('go', key),
+  };
+}
+
+export const REFERENCE_NOTE = 'Fragmentos ilustrativos. El resaltado relaciona los eventos de la simulación con operaciones equivalentes; no representa la ejecución de estos lenguajes dentro del navegador';
+export const CONFIGURATION_NOTE = 'Ejemplo numérico de referencia, no una implementación de seguridad HTTP. Muestra una configuración fija de aprobación, no una transcripción automática de cada cambio visual ni exactamente los mismos nodos de todos los presets.';

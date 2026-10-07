@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { CODE_TEMPLATES } from '../../data/codeTemplates';
+import { CODE_TEMPLATES, referenceLine, REFERENCE_NOTE, CONFIGURATION_NOTE } from '../../data/codeTemplates';
 import { SupportedLanguage, SimulationStep } from '../../types';
 import { DoubleBezelCard } from '../layout/DoubleBezelCard';
 import { 
-  Code2, 
   Copy, 
   Check, 
   Sparkles, 
@@ -21,7 +20,7 @@ export const SynchronizedCodeViewer: React.FC<SynchronizedCodeViewerProps> = ({
   const [copied, setCopied] = useState(false);
 
   const activeTemplate = CODE_TEMPLATES[selectedLanguage];
-  const activeLineNumber = currentStep ? currentStep.codeLineNumber[selectedLanguage] : null;
+  const activeLineNumber = currentStep ? referenceLine(selectedLanguage, currentStep.codeLineKey) : null;
 
   const handleCopyCode = () => {
     const fullText = activeTemplate.lines.map((l) => l.text).join('\n');
@@ -40,7 +39,7 @@ export const SynchronizedCodeViewer: React.FC<SynchronizedCodeViewerProps> = ({
             Sincronización en Tiempo Real
           </span>
           <h2 className="text-lg font-bold text-[#41478B]">
-            Visor de Código de Referencia Ejecutable
+            Código de referencia del patrón
           </h2>
           <p className="text-xs text-[#5A5478] mt-0.5">
             Las líneas de código se iluminan en vivo conforme la simulación del laboratorio avanza paso a paso.
@@ -48,7 +47,7 @@ export const SynchronizedCodeViewer: React.FC<SynchronizedCodeViewerProps> = ({
         </div>
 
         {/* Selector de lenguaje y botón de copiar */}
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <div className="flex items-center bg-[#FAF8FD] p-1 rounded-full border border-[#E8E2D4]">
             {(['java', 'typescript', 'python', 'go'] as SupportedLanguage[]).map((lang) => (
               <button
@@ -76,10 +75,12 @@ export const SynchronizedCodeViewer: React.FC<SynchronizedCodeViewerProps> = ({
         </div>
       </div>
 
+      <p className="px-4 text-xs text-[#5A5478] leading-relaxed">{REFERENCE_NOTE}. {CONFIGURATION_NOTE}</p>
+
       <DoubleBezelCard innerClassName="p-0">
         
         {/* Estado del paso actual */}
-        <div className="flex items-center justify-between px-5 py-3 bg-[#FAF8FD] border-b border-[#E8E2D4] text-xs">
+        <div className="flex flex-wrap gap-2 items-center justify-between px-5 py-3 bg-[#FAF8FD] border-b border-[#E8E2D4] text-xs">
           <div className="flex items-center gap-2.5">
             <div className="flex items-center gap-1.5 font-mono text-[#5A5478]">
               <span className="w-2 h-2 rounded-full bg-[#B57DDA] animate-pulse" />
@@ -91,7 +92,7 @@ export const SynchronizedCodeViewer: React.FC<SynchronizedCodeViewerProps> = ({
           {currentStep ? (
             <div className="flex items-center gap-2 bg-[#B57DDA]/20 border border-[#B57DDA]/40 px-3 py-1 rounded-full text-[11px] font-mono text-[#41478B] font-bold">
               <span className="w-1.5 h-1.5 rounded-full bg-[#B57DDA]" />
-              <span>Ejecutando línea activa: {activeLineNumber}</span>
+              <span>Línea de referencia resaltada: {activeLineNumber}</span>
               <span className="text-[#6E688B]">({currentStep.codeLineKey})</span>
             </div>
           ) : (
@@ -169,28 +170,28 @@ export const SynchronizedCodeViewer: React.FC<SynchronizedCodeViewerProps> = ({
         
         <DoubleBezelCard innerClassName="p-5">
           <h4 className="font-bold text-xs uppercase tracking-wider text-[#41478B] font-mono mb-1">
-            1. Puntero al Sucesor
+            1. Referencia al sucesor
           </h4>
           <p className="text-xs text-[#5A5478] leading-relaxed">
-            La clase abstracta <code className="text-[#41478B] bg-[#E8E2D4]/50 px-1 py-0.5 rounded font-mono font-bold">Handler</code> encapsula la referencia al siguiente objeto (<code className="text-[#2D2A4A] font-mono">nextApprover</code>) y el método <code className="text-[#2D2A4A] font-mono">setNext()</code>.
+            Cada manejador mantiene una referencia opcional al sucesor. En estos ejemplos el enlace es mutable; otras implementaciones lo fijan en el constructor.
           </p>
         </DoubleBezelCard>
 
         <DoubleBezelCard innerClassName="p-5">
           <h4 className="font-bold text-xs uppercase tracking-wider text-[#41478B] font-mono mb-1">
-            2. Método Plantilla (Template Method)
+            2. Manejo y delegación
           </h4>
           <p className="text-xs text-[#5A5478] leading-relaxed">
-            La propagación <code className="text-[#41478B] bg-[#E8E2D4]/50 px-1 py-0.5 rounded font-mono font-bold">canHandle()</code> y la delegación al sucesor suelen ubicarse en la clase base para no duplicar código en los manejadores concretos.
+            La operación de manejo decide atender o delegar. Template Method es una combinación posible en las versiones con clase base, no un requisito de CoR; el ejemplo Go usa una estructura y métodos.
           </p>
         </DoubleBezelCard>
 
         <DoubleBezelCard innerClassName="p-5">
           <h4 className="font-bold text-xs uppercase tracking-wider text-[#41478B] font-mono mb-1">
-            3. Encadenamiento Fluido (Fluent Interface)
+            3. Configuración de la cadena
           </h4>
           <p className="text-xs text-[#5A5478] leading-relaxed">
-            Al hacer que <code className="text-[#41478B] bg-[#E8E2D4]/50 px-1 py-0.5 rounded font-mono font-bold">setNext()</code> devuelva el sucesor, el cliente puede escribir <code className="text-[#2D2A4A] font-mono">h1.setNext(h2).setNext(h3)</code> de forma concisa.
+            El cliente ensambla los enlaces antes de emitir. Devolver el sucesor permite encadenamiento fluido en estos ejemplos, pero no es un requisito del patrón.
           </p>
         </DoubleBezelCard>
 

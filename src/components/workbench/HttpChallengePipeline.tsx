@@ -20,6 +20,7 @@ export function HttpChallengePipeline({ chain, onChange, visible }: { chain: Fil
   const finished = !!run && step === run.trace.length - 1;
   return <section className="op-workspace" aria-label="Pipeline HTTP de la misión">
     <div className="op-section-head"><div><h3>Cadena de seguridad</h3><p>Dominio de la misión · POST /erp/compras</p></div><code>Token + rol admin</code></div>
+    <p className="op-context">La misión utiliza compras y rol admin como dominio didáctico. El prototipo Java RF03 aplica una estructura equivalente a radicación de propuestas con identidades Investigador/Evaluador. Reordenar es parte del juego; el prototipo Java fija sus sucesores mediante constructores. Auditoría solo registra un rechazo si se alcanza antes del filtro que lo produce.</p>
     <div className="op-dispatch"><label className="op-label" htmlFor={requestId}>Solicitud de prueba<select id={requestId} className="op-input" value={requestIndex} disabled={playing} onChange={e => { clear(); setRequestIndex(Number(e.target.value)); }}>{httpRequests.map((req, i) => <option key={req.title} value={i}>{req.title} · esperado {req.expected}</option>)}</select></label><button className="op-button" disabled={playing} onClick={execute}><Play size={16} aria-hidden="true" />Simular petición</button></div>
     <div className="op-chain-origin"><span>Cliente HTTP</span><code>Token {httpRequests[requestIndex].token ? 'válido' : 'inválido'} · rol {httpRequests[requestIndex].role}</code></div>
     <ol className="op-chain">{chain.map((filter, i) => {

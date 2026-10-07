@@ -33,7 +33,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onOpenLab }) =
       title: "Desacoplamiento y Receptor Implícito",
       code: "Emisor Desacoplado",
       description:
-        "Comprender cómo el cliente emite una petición sin necesidad de conocer cuál objeto concreto la procesará, erradicando cadenas de 'if-else' monolíticas y acoplamientos rígidos.",
+        "Comprender cómo el cliente emite una petición sin necesidad de conocer cuál objeto concreto la procesará, delegando en la cadena la selección del receptor definitivo. El cliente puede conocer su configuración.",
       benefit: "Reduce el acoplamiento y promueve la reutilización de código.",
     },
     {
@@ -49,23 +49,23 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onOpenLab }) =
       title: "Riesgo GoF: 'Receipt is not guaranteed'",
       code: "Peticiones Huérfanas",
       description:
-        "Evidenciar el riesgo canónico documentado por el Gang of Four cuando una solicitud no coincide con ningún manejador y cae al vacío, y cómo prevenirlo mediante manejadores Catch-All defensivos.",
+        "Evidenciar el riesgo canónico documentado por el Gang of Four cuando una solicitud no coincide con ningún manejador y queda sin atender, y cómo responder mediante un terminal que rechace, registre o escale.",
       benefit: "Enseña patrones defensivos esenciales para producción.",
     },
     {
       icon: <Code2 className="w-5 h-5 text-[#B57DDA]" />,
-      title: "Trazabilidad Abstracción ↔ Código Real",
+      title: "Correspondencia didáctica ↔ Código",
       code: "Sincronización en Vivo",
       description:
-        "Vincular la topología conceptual con implementaciones reales y canónicas en Java (GoF clásico), TypeScript, Python y Go, viendo la línea de código exacta que se activa en cada paso.",
+        "Relacionar los eventos del simulador con operaciones equivalentes en fragmentos didácticos de Java, TypeScript, Python y Go. El navegador no ejecuta esos ejemplos.",
       benefit: "Cierra la brecha entre la teoría académica y el código real.",
     },
     {
       icon: <Boxes className="w-5 h-5 text-[#41478B]" />,
-      title: "Cumplimiento de Principios SOLID (SRP & OCP)",
+      title: "Principios favorecidos (SRP & OCP)",
       code: "Principios de Diseño",
       description:
-        "Verificar cómo cada manejador tiene una única responsabilidad de decisión (SRP) y cómo se pueden incorporar nuevos eslabones a la cadena sin alterar clases existentes (OCP).",
+        "Estudiar cómo CoR favorece SRP y OCP sin garantizar SOLID. Añadir un manejador puede requerir cambiar el ensamblado, aunque se conserven los existentes.",
       benefit: "Arquitectura escalable, modular y fácilmente testeable.",
     },
     {
@@ -73,7 +73,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onOpenLab }) =
       title: "Conexión con la Industria Contemporánea",
       code: "Middlewares Modernos",
       description:
-        "Identificar cómo este patrón de 1994 es la raíz directa de los middlewares HTTP en Express.js, Django, ASP.NET Core, Spring Security y el Event Bubbling en el DOM de los navegadores.",
+        "Comparar middleware documentado en Express y Spring Security con mecanismos relacionados, como propagación DOM y excepciones, y analogías de escalamiento ITSM.",
       benefit: "Aplicabilidad inmediata en frameworks web de producción.",
     },
   ];
@@ -95,7 +95,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onOpenLab }) =
       icon: <GitFork className="w-4 h-4 text-[#B57DDA]" />,
       badge: 'Simulador en Vivo',
       summary:
-        'Construye, reordena y manipula cadenas de manejadores. Elige dominios reales (Aprobación de Gastos, Soporte TI, Filtros HTTP), controla la velocidad de ejecución y observa la telemetría paso a paso.',
+        'Construye, reordena y manipula cadenas de manejadores. Elige dominios didácticos (Gastos, Soporte TI, Escalamiento de riesgo), controla la velocidad de ejecución y observa la telemetría paso a paso.',
       actionText: 'Explorar Simulador',
     },
     {
@@ -104,7 +104,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onOpenLab }) =
       icon: <Code2 className="w-4 h-4 text-[#41478B]" />,
       badge: 'Java • TS • Python • Go',
       summary:
-        'Inspecciona implementaciones canónicas con explicaciones arquitectónicas línea a línea. Al correr la simulación, el visor ilumina en tiempo real la línea exacta que se está ejecutando en el lenguaje elegido.',
+        'Inspecciona fragmentos ilustrativos. El resaltado relaciona los eventos de la simulación con operaciones equivalentes del lenguaje elegido; el código estático muestra una configuración de referencia.',
       actionText: 'Ver Código',
     },
     {
@@ -113,25 +113,25 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onOpenLab }) =
       icon: <HelpCircle className="w-4 h-4 text-emerald-600" />,
       badge: '8 Preguntas Universitarias',
       summary:
-        'Pon a prueba tu dominio sobre receptores implícitos, SOLID, manejo de excepciones, y diferencias críticas entre Chain of Responsibility, Decorator y Strategy con retroalimentación explicada de cada opción.',
+        'Pon a prueba tu dominio sobre receptores implícitos, SRP y OCP, recepción no garantizada, estructura, aplicabilidad, una propuesta para RF03 y observabilidad con retroalimentación explicada de cada opción.',
       actionText: 'Iniciar Quiz',
     },
     {
       tab: 'cases' as ActiveTab,
-      label: '4. Galería de Casos de Producción',
+      label: '4. Casos y mecanismos relacionados',
       icon: <Layers className="w-4 h-4 text-purple-600" />,
       badge: 'Casos Reales',
       summary:
-        'Descubre 5 sistemas de producción que emplean el patrón: Express/Django Middlewares, Spring Security, DOM Event Bubbling, Call Stack de Excepciones y Mesas de Ayuda ITSM con mapeo GoF formal.',
+        'Explora middleware documentado (Express y Spring Security), mecanismos relacionados (DOM y excepciones) y una analogía de negocio (ITSM), con fuentes y código didáctico propio.',
       actionText: 'Ver Casos Reales',
     },
     {
       tab: 'reference' as ActiveTab,
-      label: '5. Referencia Canónica & Diagrama UML',
+      label: '5. Referencia & Diagrama UML',
       icon: <BookOpen className="w-4 h-4 text-[#41478B]" />,
       badge: 'Diagrama Interactivo',
       summary:
-        'Consulta la definición formal del libro del GoF, inspecciona el diagrama de clases interactivo en SVG con tarjetas detalladas de cada clase, y analiza la matriz de ventajas, desventajas y aplicabilidad.',
+        'Consulta una paráfrasis en español de la definición del GoF, inspecciona el diagrama de clases interactivo en SVG con tarjetas detalladas de cada clase, y analiza la matriz de ventajas, desventajas y aplicabilidad.',
       actionText: 'Consultar UML',
     },
   ];
@@ -236,13 +236,13 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onOpenLab }) =
                 Sincronización de Código Multilenguaje
               </h3>
               <p className="text-xs text-[#5A5478] leading-relaxed">
-                Cada evento visual de la simulación tiene correlación directa con código canónico en <strong>Java</strong>,
-                <strong>TypeScript</strong>, <strong>Python</strong> y <strong>Go</strong>, resaltando la instrucción exacta que procesa la petición.
+                El laboratorio simula el recorrido de las solicitudes en el navegador y relaciona sus eventos con fragmentos de referencia en <strong>Java</strong>,
+                <strong>TypeScript</strong>, <strong>Python</strong> y <strong>Go</strong>. La animación no ejecuta estos ejemplos.
               </p>
             </div>
             <div className="pt-3 border-t border-[#E8E2D4]/60 mt-3">
               <span className="text-[10px] font-mono font-semibold text-[#41478B] uppercase tracking-wider">
-                Trazabilidad 1 a 1
+                Correspondencia didáctica
               </span>
             </div>
           </DoubleBezelCard>
@@ -253,11 +253,10 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onOpenLab }) =
                 <CheckCircle2 className="w-4 h-4" />
               </div>
               <h3 className="font-bold text-sm text-[#41478B]">
-                100% Client-Side & Sin Fricción
+                Simulación individual en el navegador
               </h3>
               <p className="text-xs text-[#5A5478] leading-relaxed">
-                Diseñada como una Single Page Application (SPA) ultrarrápida. No requiere bases de datos, registros ni dependencias externas;
-                cada estudiante corre su propia simulación aislada de forma inmediata y privada en cualquier navegador.
+                La simulación individual se realiza en el navegador. Las salas permiten compartir avances y resultados mediante el backend y la persistencia del servidor. La práctica individual guarda avances locales según el modo.
               </p>
             </div>
             <div className="pt-3 border-t border-[#E8E2D4]/60 mt-3">
@@ -425,7 +424,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ onNavigate, onOpenLab }) =
               Síntesis Rápida
             </span>
             <p className="text-xs sm:text-sm text-[#41478B] font-medium">
-              "Evita acoplar el emisor de una petición a su receptor dando a más de un objeto la oportunidad de tratarla." — GoF
+              Evita acoplar el emisor a la selección del receptor, dando a varios objetos la oportunidad de atender la petición. — Paráfrasis en español de GoF
             </p>
           </div>
           {onNavigate && (

@@ -21,20 +21,20 @@ export const RealWorldGallery: React.FC = () => {
         <div>
           <span className="text-[10px] font-mono tracking-widest uppercase text-lavender font-bold flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5" />
-            Casos de Producción & Frameworks
+            Casos, mecanismos y analogías
           </span>
           <h2 className="text-lg font-bold text-french">
             Galería del Patrón en el Mundo Real
           </h2>
           <p className="text-xs text-french/70 mt-0.5">
-            Explora cómo los frameworks modernos que usas a diario aplican Chain of Responsibility tras bambalinas.
+            Compara middleware documentado con mecanismos relacionados y analogías de negocio. Los fragmentos son código didáctico propio.
           </p>
         </div>
 
         {/* Badge de Total de Casos */}
         <div className="flex items-center gap-2">
           <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-lavender/20 border border-lavender/40 text-french">
-            5 Casos Documentados
+            5 ejemplos clasificados
           </span>
         </div>
       </div>
@@ -106,7 +106,7 @@ export const RealWorldGallery: React.FC = () => {
             <div>
               <h4 className="font-bold text-xs uppercase tracking-wider text-french font-mono mb-3 flex items-center gap-1.5">
                 <ShieldCheck className="w-4 h-4 text-french" />
-                <span>Mapeo Directo a los Roles del Patrón GoF:</span>
+                <span>Correspondencia didáctica con roles de CoR:</span>
               </h4>
 
               <div className="overflow-x-auto">
@@ -143,6 +143,7 @@ export const RealWorldGallery: React.FC = () => {
               <div>
                 <strong className="text-french block mb-0.5 font-bold">Lección de Arquitectura:</strong>
                 <p className="italic text-french/80">{activeCase.keyTakeaway}</p>
+                <p className="mt-3 text-xs">{activeCase.classification} · <a className="underline break-words" href={activeCase.source.url} target="_blank" rel="noreferrer">{activeCase.source.title}</a></p>
               </div>
             </div>
 
@@ -153,11 +154,11 @@ export const RealWorldGallery: React.FC = () => {
         <div className="lg:col-span-5 flex flex-col gap-6">
           <DoubleBezelCard innerClassName="p-0">
             
-            <div className="flex items-center justify-between px-5 py-3 bg-bone/35 border-b border-bone text-xs">
+            <div className="flex flex-wrap gap-2 items-center justify-between px-5 py-3 bg-bone/35 border-b border-bone text-xs">
               <div className="flex items-center gap-2">
                 <Code className="w-4 h-4 text-lavender" />
                 <span className="font-mono text-french font-bold">
-                  Implementación en {activeCase.tech}
+                  {activeCase.id === 'it-escalation' ? 'Representación didáctica del escalamiento' : 'Fragmento ilustrativo'}
                 </span>
               </div>
               <span className="text-[10px] font-mono text-french/60 uppercase font-bold">
@@ -165,6 +166,7 @@ export const RealWorldGallery: React.FC = () => {
               </span>
             </div>
 
+            <p className="p-4 text-xs text-french/80 leading-relaxed">{activeCase.snippetNote}</p>
             <div className="p-4 sm:p-5 font-mono text-[11px] leading-relaxed overflow-x-auto bg-porcelain max-h-[580px] overflow-y-auto border-t border-bone">
               <pre className="text-french">
                 <code>{activeCase.codeSnippet}</code>

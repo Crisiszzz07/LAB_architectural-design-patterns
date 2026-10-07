@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { CODE_TEMPLATES } from '../../data/codeTemplates';
+import { CODE_TEMPLATES, referenceLine, REFERENCE_NOTE, CONFIGURATION_NOTE } from '../../data/codeTemplates';
 import { SupportedLanguage, SimulationStep } from '../../types';
 import { 
   Code2, 
@@ -24,9 +24,9 @@ export const InlineCodeViewer: React.FC<InlineCodeViewerProps> = ({
   const activeLineRef = useRef<HTMLTableRowElement | null>(null);
 
   const activeTemplate = CODE_TEMPLATES[selectedLanguage];
-  const activeLineNumber = currentStep ? currentStep.codeLineNumber[selectedLanguage] : null;
+  const activeLineNumber = currentStep ? referenceLine(selectedLanguage, currentStep.codeLineKey) : null;
 
-  // Auto-scroll a la línea que se está ejecutando
+  // Auto-scroll a la línea de referencia resaltada
   useEffect(() => {
     if (activeLineRef.current) {
       activeLineRef.current.scrollIntoView({
@@ -52,11 +52,11 @@ export const InlineCodeViewer: React.FC<InlineCodeViewerProps> = ({
         <div className="flex items-center gap-2">
           <Code2 className="w-4 h-4 text-[#B57DDA]" />
           <span className="text-xs font-bold text-[#41478B] font-mono">
-            Código Vivo Sincronizado
+            Código de referencia del patrón
           </span>
           {activeLineNumber ? (
             <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-[#B57DDA]/20 text-[#41478B] border border-[#B57DDA]/40 animate-pulse">
-              Línea activa: {activeLineNumber}
+              Referencia: {activeLineNumber}
             </span>
           ) : (
             <span className="text-[10px] font-mono text-[#AAA0BB] italic hidden sm:inline">
@@ -103,6 +103,8 @@ export const InlineCodeViewer: React.FC<InlineCodeViewerProps> = ({
         </div>
 
       </div>
+
+      <p className="px-4 text-xs text-[#5A5478] leading-relaxed">{REFERENCE_NOTE}. {CONFIGURATION_NOTE}</p>
 
       {isExpanded && (
         <div className="transition-all animate-fade-in">

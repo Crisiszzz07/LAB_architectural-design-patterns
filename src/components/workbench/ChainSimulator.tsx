@@ -1,3 +1,4 @@
+import { referenceLines } from '../../data/codeTemplates';
 import React, { useState, useEffect, useRef } from 'react';
 import { 
   HandlerNode, 
@@ -74,7 +75,7 @@ export const ChainSimulator: React.FC<ChainSimulatorProps> = ({ onStepChange, in
       status: 'transiting',
       message: `Cliente inicializa solicitud con valor ${activePreset.unit === '$' ? '$' + value.toLocaleString() : value + ' ' + activePreset.unit} y la envía a la cabeza de la cadena.`,
       codeLineKey: 'client_send',
-      codeLineNumber: { java: 37, typescript: 33, python: 28, go: 42 },
+      codeLineNumber: referenceLines('client_send'),
       passedCondition: null,
     });
 
@@ -95,7 +96,7 @@ export const ChainSimulator: React.FC<ChainSimulatorProps> = ({ onStepChange, in
         status: 'evaluating',
         message: `[${h.name}] Evaluando canHandle(request): ¿${value} ${h.operator === 'lte' ? '≤' : h.operator === 'gte' ? '≥' : '=='} ${h.threshold}? -> ${canHandle ? 'VERDADERO' : 'FALSO'}`,
         codeLineKey: 'eval_condition',
-        codeLineNumber: { java: 12, typescript: 11, python: 12, go: 23 },
+        codeLineNumber: referenceLines('eval_condition'),
         passedCondition: canHandle,
       });
 
@@ -107,7 +108,7 @@ export const ChainSimulator: React.FC<ChainSimulatorProps> = ({ onStepChange, in
           status: 'handled',
           message: `[${h.name}] ¡Condición cumplida! Procesa la solicitud: "${h.actionSummary}". Fin de la cadena.`,
           codeLineKey: 'do_handle',
-          codeLineNumber: { java: 13, typescript: 12, python: 13, go: 24 },
+          codeLineNumber: referenceLines('do_handle'),
           passedCondition: true,
         });
         handled = true;
@@ -122,7 +123,7 @@ export const ChainSimulator: React.FC<ChainSimulatorProps> = ({ onStepChange, in
             status: 'delegating',
             message: `[${h.name}] No cumple la condición. Delegando en el sucesor (${nextH.name}).`,
             codeLineKey: 'call_successor',
-            codeLineNumber: { java: 15, typescript: 14, python: 15, go: 28 },
+            codeLineNumber: referenceLines('call_successor'),
             passedCondition: false,
           });
         } else {
@@ -133,7 +134,7 @@ export const ChainSimulator: React.FC<ChainSimulatorProps> = ({ onStepChange, in
             status: 'unhandled',
             message: `[${h.name}] Sucesor es nulo (next == null). La petición superó todos los eslabones sin ser resuelta. Riesgo GoF: "Receipt is not guaranteed".`,
             codeLineKey: 'no_successor_sink',
-            codeLineNumber: { java: 18, typescript: 17, python: 18, go: 31 },
+            codeLineNumber: referenceLines('no_successor_sink'),
             passedCondition: false,
           });
         }
@@ -444,7 +445,7 @@ export const ChainSimulator: React.FC<ChainSimulatorProps> = ({ onStepChange, in
                             : 'bg-bone/40 text-french/70'
                         }`}
                       >
-                        {isFinishedUnhandled ? '¡Caída GoF!' : 'Límite'}
+                        {isFinishedUnhandled ? 'Sin receptor' : 'Límite'}
                       </span>
                     </div>
                   </div>
@@ -520,21 +521,21 @@ export const ChainSimulator: React.FC<ChainSimulatorProps> = ({ onStepChange, in
                 <span className="font-bold text-french block mb-1 text-[11px]">
                   1. Experimenta con el orden:
                 </span>
-                Prueba mover un eslabón con umbral alto al principio. Notarás cómo "acapara" todas las peticiones, impidiendo que los eslabones menores se ejecuten.
+                {activePreset.id === 'expense-approval' ? 'Mueve la Junta Directiva al inicio y compara quién responde a $350. Un umbral alto puede acaparar las solicitudes que cubre.' : activePreset.id === 'it-support' ? 'Mueve Nivel 3 al inicio y compara quién atiende una complejidad hipotética de 1. No es una escala real de severidad.' : 'Mueve el especialista de riesgo alto al inicio y compara quién revisa un puntaje de 10. Se elige al primer responsable capaz; no se aplican controles HTTP.'}
               </div>
 
               <div className="p-2.5 rounded-xl bg-bone/25 border border-bone">
                 <span className="font-bold text-french block mb-1 text-[11px]">
                   2. Emisor desacoplado:
                 </span>
-                Observa que el Cliente nunca invoca <code className="text-french font-mono font-bold bg-porcelain px-1 py-0.5 rounded border border-bone">cfo.approve()</code> directamente; solo habla con el primer eslabón disponible.
+                El cliente envía a la cabeza de la cadena; puede conocer su configuración, pero delega la selección del receptor definitivo.
               </div>
 
               <div className="p-2.5 rounded-xl bg-bone/25 border border-bone">
                 <span className="font-bold text-french block mb-1 text-[11px]">
                   3. Riesgo de recepción:
                 </span>
-                Ingresa un valor mayor al máximo (ej. $90,000) y verás la petición caer al final. ¡Ese es el riesgo clásico del patrón!
+                {activePreset.id === 'expense-approval' ? 'Prueba $95.000: supera los límites de aprobación. Un terminal puede rechazar, registrar o escalar, sin aprobar todo.' : activePreset.id === 'it-support' ? 'Prueba complejidad 10: supera la capacidad de los niveles estándar. Considera una política de escalamiento o respuesta explícita.' : 'Prueba riesgo 98: ningún responsable estándar tiene capacidad. Para estudiar middleware de continuar/rechazar, abre la misión Seguridad ERP.'}
               </div>
             </div>
           </DoubleBezelCard>
